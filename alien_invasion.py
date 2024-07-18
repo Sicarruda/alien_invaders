@@ -24,6 +24,8 @@ class AlienInvasion:
 
     def _check_keydown_events(self, event):
         # Respond to keypresses.
+        if event.key == pygame.K_q:
+            sys.exit()
 
         if event.key == pygame.K_RIGHT:
             # Move the ship to the right 
@@ -67,6 +69,7 @@ class AlienInvasion:
 
                 if event.type == pygame.QUIT:
                     sys.exit()
+
                 elif event.type == pygame.KEYDOWN:
                     self._check_keydown_events(event)
 
