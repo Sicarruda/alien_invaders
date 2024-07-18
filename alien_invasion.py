@@ -15,9 +15,11 @@ class AlienInvasion:
 
         self.clock = pygame.time.Clock()
         self.settings = Settings()
+        self.change_screen_mode = False
         self.screen = pygame.display.set_mode(
-            (self.settings.screen_width, self.settings.screen_height)
+            (self.settings.screen_width_standard, self.settings.screen_height_standard)
         )
+
         self.ship = Ship(self)
 
         pygame.display.set_caption("Attack Invasion")
@@ -27,14 +29,23 @@ class AlienInvasion:
         if event.key == pygame.K_q:
             sys.exit()
 
+        if event.key == pygame.K_f:
+            self.change_screen_mode = True
+
+            if self.settings.fullscreen_mode:
+                self.settings.fullscreen_mode = False
+
+            else:
+                self.settings.fullscreen_mode = True
+
         if event.key == pygame.K_RIGHT:
-            # Move the ship to the right 
+            # Move the ship to the right
             self.ship.moving_right = True
 
         if event.key == pygame.K_LEFT:
             # Move the ship to the left.
             self.ship.moving_left = True
-        
+
         if event.key == pygame.K_UP:
             # Move the ship to the top.
             self.ship.moving_top = True
@@ -47,13 +58,13 @@ class AlienInvasion:
         # Respond to keypresses.
 
         if event.key == pygame.K_RIGHT:
-            # Move the ship to the right 
+            # Move the ship to the right
             self.ship.moving_right = False
 
         if event.key == pygame.K_LEFT:
             # Move the ship to the left.
             self.ship.moving_left = False
-        
+
         if event.key == pygame.K_UP:
             # Move the ship to the top.
             self.ship.moving_top = False
@@ -67,17 +78,33 @@ class AlienInvasion:
 
         for event in pygame.event.get():
 
-                if event.type == pygame.QUIT:
-                    sys.exit()
+            if event.type == pygame.QUIT:
+                sys.exit()
 
-                elif event.type == pygame.KEYDOWN:
-                    self._check_keydown_events(event)
+            elif event.type == pygame.KEYDOWN:
+                self._check_keydown_events(event)
 
-                elif event.type == pygame.KEYUP:
-                    self._check_keyup_events(event)
+            elif event.type == pygame.KEYUP:
+                self._check_keyup_events(event)
 
     def _update_screen(self):
         # Update images on the screen, and flip to the new screen.
+
+        if self.change_screen_mode:
+            if self.settings.fullscreen_mode:
+                self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+                self.settings.screen_width = self.screen.get_rect().width
+                self.settings.screen_height = self.screen.get_rect().height
+                self.change_screen_mode = False
+
+            else:
+                self.screen = pygame.display.set_mode(
+                    (
+                        self.settings.screen_width_standard,
+                        self.settings.screen_height_standard,
+                    )
+                )
+                self.change_screen_mode = False
 
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()

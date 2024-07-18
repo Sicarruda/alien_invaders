@@ -5,8 +5,11 @@ class Settings:
         # Initialize the game's settings.
 
         # Screen settings:
-        self.screen_width = 1200
-        self.screen_height = 800
+        self.screen_width = 0
+        self.screen_height = 0
+        self.screen_width_standard = 1200
+        self.screen_height_standard= 800
         self.bg_color = (230,230,230)
-        self.ship_speed = 3.5
-        
+        self.ship_speed = 7
+        self.fullscreen_mode = False
+        self.normal_screen_mode = True
