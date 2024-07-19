@@ -27,10 +27,13 @@ class AlienInvasion:
 
     def _check_keydown_events(self, event):
         # Respond to keypresses.
+        
         if event.key == pygame.K_q:
+            # Exit to the game when press q. 
             sys.exit()
-
+        
         if event.key == pygame.K_f:
+            # Change the variables to change the screen mode.
             self.change_screen_mode = True
             self.ship_restart = True
 
@@ -87,10 +90,11 @@ class AlienInvasion:
 
     def _update_screen(self):
         # Update images on the screen, and flip to the new screen.
+
         self.screen.fill(self.settings.bg_color)
         
         if self.change_screen_mode:
-
+            # Change screen mode to Fullscreen.
             if self.settings.fullscreen_mode:
                 self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
                 self.settings.screen_width = self.screen.get_rect().width
@@ -99,6 +103,7 @@ class AlienInvasion:
                 self.change_screen_mode = False
 
             else:
+                # Change screen mode to standart mode.
                 self.screen = pygame.display.set_mode(
                     (
                         self.settings.screen_width_standard,
@@ -109,6 +114,7 @@ class AlienInvasion:
                 self.change_screen_mode = False
 
         if self.ship_restart:
+            # Restart the ship position
             self.ship.restart()
             self.ship_restart = False
 
