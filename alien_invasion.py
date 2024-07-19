@@ -3,6 +3,7 @@ import pygame
 
 from settings import Settings
 from ship import Ship
+from bullet import Bullet
 
 
 class AlienInvasion:
@@ -15,6 +16,7 @@ class AlienInvasion:
 
         self.clock = pygame.time.Clock()
         self.settings = Settings()
+
         self.change_screen_mode = False
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width_standard, self.settings.screen_height_standard)
@@ -22,6 +24,8 @@ class AlienInvasion:
 
         self.ship = Ship(self)
         self.ship_restart = False
+
+        self.bullets = pygame.sprite.Group()
 
         pygame.display.set_caption("Attack Invasion")
 
@@ -54,6 +58,10 @@ class AlienInvasion:
         if event.key == pygame.K_DOWN:
             # Move the ship to the botton.
             self.ship.moving_bottom = True
+
+        if event.key == pygame.K_SPACE:
+            # Fire the bullets
+            self._fire_bullet()
 
     def _check_keyup_events(self, event):
         # Respond to keypresses.
@@ -88,6 +96,12 @@ class AlienInvasion:
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
+    def _fire_bullet(self):
+        # Create a new bullet and add it to the bullets group.
+
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
+
     def _update_screen(self):
         # Update images on the screen, and flip to the new screen.
 
@@ -112,6 +126,9 @@ class AlienInvasion:
                 )
                 
                 self.change_screen_mode = False
+        
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
 
         if self.ship_restart:
             # Restart the ship position
@@ -129,6 +146,7 @@ class AlienInvasion:
             # Watch for keyboard and mouse events.
             self._check_events()           
             self.ship.update()
+            self.bullets.update()
             self._update_screen()
             self.clock.tick(60)
 
