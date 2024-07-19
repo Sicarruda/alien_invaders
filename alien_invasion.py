@@ -150,6 +150,11 @@ class AlienInvasion:
             self._update_screen()
             self.clock.tick(60)
 
+            # Get rid of bullets that have disappeared.
+            for bullet in self.bullets.copy():
+                if bullet.rect.bottom <=0:
+                    self.bullets.remove(bullet)
+
 
 if __name__ == "__main__":
     # Make a game intance, and run the game.
