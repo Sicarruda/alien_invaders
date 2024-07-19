@@ -21,6 +21,7 @@ class AlienInvasion:
         )
 
         self.ship = Ship(self)
+        self.ship_restart = False
 
         pygame.display.set_caption("Attack Invasion")
 
@@ -31,12 +32,9 @@ class AlienInvasion:
 
         if event.key == pygame.K_f:
             self.change_screen_mode = True
+            self.ship_restart = True
 
-            if self.settings.fullscreen_mode:
-                self.settings.fullscreen_mode = False
-
-            else:
-                self.settings.fullscreen_mode = True
+            self.settings.fullscreen_mode = not self.settings.fullscreen_mode
 
         if event.key == pygame.K_RIGHT:
             # Move the ship to the right
@@ -89,12 +87,15 @@ class AlienInvasion:
 
     def _update_screen(self):
         # Update images on the screen, and flip to the new screen.
-
+        self.screen.fill(self.settings.bg_color)
+        
         if self.change_screen_mode:
+
             if self.settings.fullscreen_mode:
                 self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
                 self.settings.screen_width = self.screen.get_rect().width
                 self.settings.screen_height = self.screen.get_rect().height
+    
                 self.change_screen_mode = False
 
             else:
@@ -104,9 +105,13 @@ class AlienInvasion:
                         self.settings.screen_height_standard,
                     )
                 )
+                
                 self.change_screen_mode = False
 
-        self.screen.fill(self.settings.bg_color)
+        if self.ship_restart:
+            self.ship.restart()
+            self.ship_restart = False
+
         self.ship.blitme()
 
         pygame.display.flip()
@@ -116,7 +121,7 @@ class AlienInvasion:
 
         while True:
             # Watch for keyboard and mouse events.
-            self._check_events()
+            self._check_events()           
             self.ship.update()
             self._update_screen()
             self.clock.tick(60)

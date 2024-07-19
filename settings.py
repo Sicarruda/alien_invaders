@@ -12,4 +12,3 @@ class Settings:
         self.bg_color = (230,230,230)
         self.ship_speed = 7
         self.fullscreen_mode = False
-        self.normal_screen_mode = True
