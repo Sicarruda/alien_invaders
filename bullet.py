@@ -12,11 +12,16 @@ class Bullet(Sprite):
         super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
-        self.color = self.settings.bullet_color
+        self.color = (60, 60, 60)
+        self.bullet_speed = 2.0
+        self.bullet_allowed = 0
+        self.bullet_width = 3
+        self.bullet_height = 15
+
 
         # Create a bullet rect at (0,0) and then set correct position.
         self.rect = pygame.Rect(
-            0, 0, self.settings.bullet_width, self.settings.bullet_height
+            0, 0, self.bullet_width, self.bullet_height
         )
         self.rect.midtop = ai_game.ship.rect.midtop
 
@@ -27,7 +32,7 @@ class Bullet(Sprite):
         # Move the bullet up the screen.
 
         # Update the exact position of the bullet.
-        self.y -= self.settings.bullet_speed
+        self.y -= self.bullet_speed
 
         # Update the rect position.
         self.rect.y = self.y
