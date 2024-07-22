@@ -7,7 +7,7 @@ from bullet_black import Bullet_black
 from bullet_blue import Bullet_blue
 from bullet_green import Bullet_green
 from bullet_red import Bullet_red
-
+from alien import Alien
 
 class AlienInvasion:
     # Overall class to manage game assets and behavior.
@@ -29,19 +29,27 @@ class AlienInvasion:
         self.ship_restart = False
 
         self.bullet_tipe = 1 # 1 = black; 2 = red; 3 = green; 4 = blue
-
         self.bullets_black_group = pygame.sprite.Group()
         self.bullets_red_group =pygame.sprite.Group()
         self.bullets_green_group =pygame.sprite.Group()
         self.bullets_blue_group = pygame.sprite.Group()
-
         self.bullet_black = Bullet_black(self)
         self.bullet_red = Bullet_red(self)
         self.bullet_blue = Bullet_blue(self)
         self.bullet_green = Bullet_green(self)
-        
+
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
 
         pygame.display.set_caption("Attack Invasion")
+
+    def _create_fleet(self):
+        # Create the fleet of aliens
+
+        # Make an alien.
+        alien = Alien(self)
+        self.aliens.add(alien)
 
     def _check_keydown_events(self, event):
         # Respond to keypresses.
@@ -213,7 +221,8 @@ class AlienInvasion:
             self.ship_restart = False
 
         self.ship.blitme()
-
+        self.aliens.draw(self.screen)
+    
         pygame.display.flip()
 
     def run_game(self):
