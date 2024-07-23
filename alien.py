@@ -9,6 +9,9 @@ class Alien(Sprite):
         # Initialize the Alien and set its starting position.
         super().__init__()
         self.screen = ai_game.screen
+        self.setting = ai_game.settings
+
+        self.speed = 1.0
 
         # Load the alien image and set its react.
         self.image = pygame.image.load("images/alien.bmp")
@@ -21,26 +24,19 @@ class Alien(Sprite):
         # Store a float for the alien's exact horizoltal position.
         self.x = float(self.rect.x)
 
+    def check_edges(self):
+        # Return True if alien is at edge of screen.
+        screen_rect = self.screen.get_rect()
+        return (self.rect.right >= screen_rect.right) or (self.rect.left <= 0)
+
     def update(self):
-        # Update the ship's position based on the movement flags.
+        # Update the alien's position to left or rigth.
+
+        # Update the screen 
         self.screen_rect = self.screen.get_rect()
-        # Update the ship's x value, not the rect.
 
-        if self.moving_right and self.rect.right < self.screen_rect.right:
-            self.x += self.settings.ship_speed
-
-        if self.moving_left and self.rect.left > 0:
-            self.x -= self.settings.ship_speed
-
-        if self.moving_bottom and self.rect.bottom < self.screen_rect.bottom:
-            self.y += self.settings.ship_speed
-
-        if self.moving_top and self.rect.top > 0:
-            self.y -= self.settings.ship_speed
-
-        # Update rect object from self.x and self.y.
+        self.x += self.speed * self.setting.fleet_direction
         self.rect.x = self.x
-        self.rect.y = self.y
 
     def restart(self):
         # Reset the ship to the starting position.

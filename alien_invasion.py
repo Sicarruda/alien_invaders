@@ -75,6 +75,22 @@ class AlienInvasion:
             current_x = alien_width
             current_y += 2 * alien_height
 
+    def _check_fleet_edges(self):
+        # Respond appropriately if any aliens have reached an edge.
+
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        # Drop the entire fleet and change the fleet's direction.
+
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+
+        self.settings.fleet_direction *= -1
+
     def _check_keydown_events(self, event):
         # Respond to keypresses.
 
@@ -214,11 +230,16 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets_blue_group.remove(bullet)
 
+    def _update_aliens(self):
+        # Update the position of all aliens in the fleet.
+        self._check_fleet_edges()
+        self.aliens.update()
+
     def _update_screen(self):
         # Update images on the screen, and flip to the new screen.
 
         self.screen.fill(self.settings.bg_color)
-        self.screen.blit(self.background_image,(0,0))
+        # self.screen.blit(self.background_image,(0,0))
 
         if self.change_screen_mode:
             # Change screen mode to Fullscreen.
@@ -237,7 +258,6 @@ class AlienInvasion:
                         self.settings.screen_height_standard,
                     )
                 )
-
                 self.change_screen_mode = False
 
         for bullet in self.bullets_black_group.sprites():
@@ -270,6 +290,7 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
             self.clock.tick(60)
 
