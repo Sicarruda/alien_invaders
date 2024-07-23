@@ -9,6 +9,10 @@ from bullet_green import Bullet_green
 from bullet_red import Bullet_red
 from alien import Alien
 
+
+# TODO refatorar o código para a exibição e criação dos projeteis
+
+
 class AlienInvasion:
     # Overall class to manage game assets and behavior.
 
@@ -18,20 +22,21 @@ class AlienInvasion:
         pygame.init()
 
         self.clock = pygame.time.Clock()
-        self.settings = Settings()
 
+        self.settings = Settings()
         self.change_screen_mode = False
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width_standard, self.settings.screen_height_standard)
         )
+        self.background_image = self.settings.background_image
 
         self.ship = Ship(self)
         self.ship_restart = False
 
-        self.bullet_tipe = 1 # 1 = black; 2 = red; 3 = green; 4 = blue
+        self.bullet_tipe = 1  # 1 = black; 2 = red; 3 = green; 4 = blue
         self.bullets_black_group = pygame.sprite.Group()
-        self.bullets_red_group =pygame.sprite.Group()
-        self.bullets_green_group =pygame.sprite.Group()
+        self.bullets_red_group = pygame.sprite.Group()
+        self.bullets_green_group = pygame.sprite.Group()
         self.bullets_blue_group = pygame.sprite.Group()
         self.bullet_black = Bullet_black(self)
         self.bullet_red = Bullet_red(self)
@@ -39,25 +44,44 @@ class AlienInvasion:
         self.bullet_green = Bullet_green(self)
 
         self.aliens = pygame.sprite.Group()
-
         self._create_fleet()
 
         pygame.display.set_caption("Attack Invasion")
 
+    def _create_alien(self, x_position, y_position):
+        # Create an alien and place it in the row.
+
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
+        self.aliens.add(new_alien)
+
     def _create_fleet(self):
         # Create the fleet of aliens
+        # TODO ajustar para os 2 modos de exibição de tela
+        # Create an alien and keep adding aliens until there's no room left.
+        # Spacing between aliens is one alien width and one alien height.
 
-        # Make an alien.
         alien = Alien(self)
-        self.aliens.add(alien)
+        alien_width, alien_height = alien.rect.size
+        current_x, current_y = alien_width, alien_height
+
+        while current_y < (self.settings.screen_height_standard - 3 * alien_height):
+            while current_x < (self.settings.screen_width_standard - 2 * alien_width):
+                self._create_alien(current_x, current_y)
+                current_x += 2 * alien_width
+            # finished a row; reset x value, and increment y value.
+            current_x = alien_width
+            current_y += 2 * alien_height
 
     def _check_keydown_events(self, event):
         # Respond to keypresses.
-        
+
         if event.key == pygame.K_q:
-            # Exit to the game when press q. 
+            # Exit to the game when press q.
             sys.exit()
-        
+
         if event.key == pygame.K_f:
             # Change the variables to change the screen mode.
             self.change_screen_mode = True
@@ -87,7 +111,7 @@ class AlienInvasion:
 
         if event.key == pygame.K_1:
             # change bullet to bullet_black
-            self.bullet_tipe = 1  
+            self.bullet_tipe = 1
 
         if event.key == pygame.K_2:
             # change bullet to bullet_red
@@ -136,60 +160,73 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         # Create a new bullet and add it to the bullets group.
-        if self.bullet_tipe == 1 and len(self.bullets_black_group) < self.bullet_black.bullet_allowed:
+        if (
+            self.bullet_tipe == 1
+            and len(self.bullets_black_group) < self.bullet_black.bullet_allowed
+        ):
             new_bullet = Bullet_black(self)
             self.bullets_black_group.add(new_bullet)
 
-        if self.bullet_tipe == 2 and len(self.bullets_red_group) < self.bullet_red.bullet_allowed:
+        if (
+            self.bullet_tipe == 2
+            and len(self.bullets_red_group) < self.bullet_red.bullet_allowed
+        ):
             new_bullet = Bullet_red(self)
             self.bullets_red_group.add(new_bullet)
 
-        if self.bullet_tipe == 3 and len(self.bullets_green_group) < self.bullet_green.bullet_allowed:
+        if (
+            self.bullet_tipe == 3
+            and len(self.bullets_green_group) < self.bullet_green.bullet_allowed
+        ):
             new_bullet = Bullet_green(self)
             self.bullets_green_group.add(new_bullet)
 
-        if self.bullet_tipe == 4 and len(self.bullets_blue_group) < self.bullet_blue.bullet_allowed:
+        if (
+            self.bullet_tipe == 4
+            and len(self.bullets_blue_group) < self.bullet_blue.bullet_allowed
+        ):
             new_bullet = Bullet_blue(self)
-            self.bullets_blue_group.add(new_bullet)        
+            self.bullets_blue_group.add(new_bullet)
 
     def _update_bullets(self):
         # Update position of bullets and get rid of old bullets.
-        
-            # Update bullets position
-            self.bullets_black_group.update()
-            self.bullets_red_group.update()
-            self.bullets_green_group.update()
-            self.bullets_blue_group.update()
 
-            # Get rid of bullets that have disappeared.
-            for bullet in self.bullets_black_group.copy():
-                if bullet.rect.bottom <=0:
-                    self.bullets_black_group.remove(bullet)
+        # Update bullets position
+        self.bullets_black_group.update()
+        self.bullets_red_group.update()
+        self.bullets_green_group.update()
+        self.bullets_blue_group.update()
 
-            for bullet in self.bullets_red_group.copy():
-                if bullet.rect.bottom <=0:
-                    self.bullets_red_group.remove(bullet)
+        # Get rid of bullets that have disappeared.
+        for bullet in self.bullets_black_group.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets_black_group.remove(bullet)
 
-            for bullet in self.bullets_green_group.copy():
-                if bullet.rect.bottom <=0:
-                    self.bullets_green_group.remove(bullet)
+        for bullet in self.bullets_red_group.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets_red_group.remove(bullet)
 
-            for bullet in self.bullets_blue_group.copy():
-                if bullet.rect.bottom <=0:
-                    self.bullets_blue_group.remove(bullet)
+        for bullet in self.bullets_green_group.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets_green_group.remove(bullet)
+
+        for bullet in self.bullets_blue_group.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets_blue_group.remove(bullet)
 
     def _update_screen(self):
         # Update images on the screen, and flip to the new screen.
 
         self.screen.fill(self.settings.bg_color)
-        
+        self.screen.blit(self.background_image,(0,0))
+
         if self.change_screen_mode:
             # Change screen mode to Fullscreen.
             if self.settings.fullscreen_mode:
                 self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
                 self.settings.screen_width = self.screen.get_rect().width
                 self.settings.screen_height = self.screen.get_rect().height
-    
+
                 self.change_screen_mode = False
 
             else:
@@ -200,7 +237,7 @@ class AlienInvasion:
                         self.settings.screen_height_standard,
                     )
                 )
-                
+
                 self.change_screen_mode = False
 
         for bullet in self.bullets_black_group.sprites():
@@ -211,7 +248,7 @@ class AlienInvasion:
 
         for bullet in self.bullets_green_group.sprites():
             bullet.draw_bullet()
-                
+
         for bullet in self.bullets_blue_group.sprites():
             bullet.draw_bullet()
 
@@ -222,7 +259,7 @@ class AlienInvasion:
 
         self.ship.blitme()
         self.aliens.draw(self.screen)
-    
+
         pygame.display.flip()
 
     def run_game(self):
@@ -230,7 +267,7 @@ class AlienInvasion:
 
         while True:
             # Watch for keyboard and mouse events.
-            self._check_events()           
+            self._check_events()
             self.ship.update()
             self._update_bullets()
             self._update_screen()
