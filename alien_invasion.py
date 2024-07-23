@@ -244,6 +244,14 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets_blue_group.remove(bullet)
 
+        if not self.aliens:
+            # Destroy existing bullets and create new fleet.
+            self.bullets_black_group.empty()
+            self.bullets_red_group.empty()
+            self.bullets_green_group.empty()
+            self.bullets_blue_group.empty()
+            self._create_fleet()
+
     def _update_aliens(self):
         # Update the position of all aliens in the fleet.
         self._check_fleet_edges()
