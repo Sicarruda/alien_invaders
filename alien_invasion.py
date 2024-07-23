@@ -213,20 +213,6 @@ class AlienInvasion:
         self.bullets_green_group.update()
         self.bullets_blue_group.update()
 
-        # Check for any bullets that have hit aliens. If so, get rid of the bullet and the alien.
-        collision_black_bullet = pygame.sprite.groupcollide(
-            self.bullets_black_group, self.aliens, True, True
-        )
-        collision_red_bullet = pygame.sprite.groupcollide(
-            self.bullets_red_group, self.aliens, True, True
-        )
-        collision_green_bullet = pygame.sprite.groupcollide(
-            self.bullets_green_group, self.aliens, True, True
-        )
-        collision_blue_bullet = pygame.sprite.groupcollide(
-            self.bullets_blue_group, self.aliens, True, True
-        )
-
         # Get rid of bullets that have disappeared.
         for bullet in self.bullets_black_group.copy():
             if bullet.rect.bottom <= 0:
@@ -244,8 +230,28 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets_blue_group.remove(bullet)
 
+        self._bullet_alien_collisions()
+    
+    def _bullet_alien_collisions(self):
+         # Check for any bullets that have hit aliens. If so, get rid of the bullet and the alien.
+        collision_black_bullet = pygame.sprite.groupcollide(
+            self.bullets_black_group, self.aliens, True, True
+        )
+        collision_red_bullet = pygame.sprite.groupcollide(
+            self.bullets_red_group, self.aliens, True, True
+        )
+        collision_green_bullet = pygame.sprite.groupcollide(
+            self.bullets_green_group, self.aliens, True, True
+        )
+        collision_blue_bullet = pygame.sprite.groupcollide(
+            self.bullets_blue_group, self.aliens, True, True
+        )
+
         if not self.aliens:
-            # Destroy existing bullets and create new fleet.
+            self._restart_fleet
+
+    def _restart_fleet(self):
+         # Destroy existing bullets and create new fleet.
             self.bullets_black_group.empty()
             self.bullets_red_group.empty()
             self.bullets_green_group.empty()
