@@ -16,6 +16,7 @@ class Settings:
 
         # Ship settings:
         self.ship_speed = 7
+        self.ship_limit = 2
 
         # Aliens settings:
         self.fleet_drop_speed = 10
