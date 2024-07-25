@@ -40,6 +40,9 @@ class AlienInvasion:
         # Make the Play button.
         self.play_button = Button(self, "PLAY")
 
+         # Create an instance to store game statistics
+        self.stats = Game_Stats(self)
+
         self.ship = Ship(self)
         self.ship_restart = False
 
@@ -55,9 +58,6 @@ class AlienInvasion:
 
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
-
-        # Create an instance to store game statistics
-        self.stats = Game_Stats(self)
 
         pygame.display.set_caption("Attack Invasion")
 
@@ -173,6 +173,25 @@ class AlienInvasion:
             # Move the ship to the botton.
             self.ship.moving_bottom = False
 
+    def _check_play_button(self,mouse_pos):
+        # Start a new game when the player clicks Play.
+
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+
+        if button_clicked and not self.game_active:
+            # Reset the game statistics.
+            self.stats.reset_stats()
+
+            self.game_active = True
+
+            # Get rid of any remaining bullets and aliens and restart de game.
+            self.aliens.empty()
+            self._restart_fleet()
+            self.ship.restart()
+            
+            # Hide the mouse cursor.
+            pygame.mouse.set_visible(False)
+
     def _check_events(self):
         # Respond to keypresses and mouse events.
 
@@ -186,6 +205,10 @@ class AlienInvasion:
 
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
 
     def _fire_bullet(self):
         # Create a new bullet and add it to the bullets group.
@@ -300,6 +323,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _check_aliens_bottom(self):
         # Check if any aliens have reached the bottom of the screen.
