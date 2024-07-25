@@ -11,6 +11,7 @@ from bullet_green import Bullet_green
 from bullet_red import Bullet_red
 from alien import Alien
 from game_stats import Game_Stats
+from button import Button
 
 
 # TODO refatorar o código para a exibição e criação dos projeteis
@@ -24,7 +25,8 @@ class AlienInvasion:
 
         pygame.init()
 
-        self.game_active = True
+        # Start Alien Invasion in an inactive state.
+        self.game_active = False
 
         self.clock = pygame.time.Clock()
         self.settings = Settings()
@@ -34,6 +36,9 @@ class AlienInvasion:
             (self.settings.screen_width_standard, self.settings.screen_height_standard)
         )
         self.background_image = self.settings.background_image
+
+        # Make the Play button.
+        self.play_button = Button(self, "PLAY")
 
         self.ship = Ship(self)
         self.ship_restart = False
@@ -347,6 +352,10 @@ class AlienInvasion:
 
         self.ship.blitme()
         self.aliens.draw(self.screen)
+
+        # Draw the play button if the game is inactive.
+        if not self.game_active:
+            self.play_button.draw_button()
 
         pygame.display.flip()
 
