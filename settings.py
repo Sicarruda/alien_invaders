@@ -27,6 +27,12 @@ class Settings:
 
         # How quickly the game speeds up
         self.speedup_scale = 1.1
+        
+        # How quickly the alien point values increase
+        self.score_scale = 1.1
+
+        # Scoring settings
+        self.alien_points = 10
 
     def level_up(self, object_update):
        object_update *= self.speedup_scale
