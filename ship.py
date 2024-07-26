@@ -21,28 +21,30 @@ class Ship:
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
+        self.speed = float(3)
+
         # Movement flag; start with a ship that's not moving
         self.moving_right = False
         self.moving_left = False
         self.moving_top = False
         self.moving_bottom = False
 
-    def update(self):
+    def update_position(self):
         # Update the ship's position based on the movement flags.
         self.screen_rect = self.screen.get_rect()
             # Update the ship's x value, not the rect.
 
         if self.moving_right and self.rect.right < self.screen_rect.right:
-            self.x += self.settings.ship_speed
+            self.x += self.speed
 
         if self.moving_left and self.rect.left > 0:
-            self.x -= self.settings.ship_speed
+            self.x -= self.speed
 
         if self.moving_bottom and self.rect.bottom < self.screen_rect.bottom:
-            self.y += self.settings.ship_speed
+            self.y += self.speed
 
         if self.moving_top and self.rect.top > 0:
-            self.y -= self.settings.ship_speed
+            self.y -= self.speed
 
         # Update rect object from self.x and self.y.
         self.rect.x = self.x
@@ -60,3 +62,9 @@ class Ship:
         # Draw the ship at its current location.
 
         self.screen.blit(self.image, self.rect)
+
+    def level_updade(self):
+         self.speed = self.settings.level_up(self.speed)
+
+    def reset_update(self):
+        self.speed = float(7)
