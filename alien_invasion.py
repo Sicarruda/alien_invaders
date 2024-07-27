@@ -224,6 +224,7 @@ class AlienInvasion:
             self.stats.reset_stats()
             self.ship.reset_update()
             self.score.prep_score()
+            self.score.prep_level()
             self.settings.alien_points = 1
 
             self.reset_game = True
@@ -346,6 +347,10 @@ class AlienInvasion:
             self.level_up = True
             self._restart_fleet()
             self.ship.level_updade()
+
+            # Increase level.
+            self.stats.level += 1
+            self.score.prep_level()
 
     def _restart_fleet(self):
         # Destroy existing bullets and create new fleet.
