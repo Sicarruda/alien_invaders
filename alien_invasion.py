@@ -340,6 +340,7 @@ class AlienInvasion:
         ):
             self.stats.score += self.settings.alien_points
             self.score.prep_score()
+            self.score.check_high_score()
 
         if not self.aliens:
             self.level_up = True
