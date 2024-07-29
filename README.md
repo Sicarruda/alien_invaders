@@ -1,6 +1,13 @@
 # Alien Invaders
 
-Alien Invaders é um jogo inspirado no clássico Space Invaders, desenvolvido com a biblioteca Pygame. Este projeto é baseado nos capítulos 12, 13 e 14 do livro "Python Crash Course" de Eric Matthes.
+Alien Invaders é um jogo inspirado no clássico Space Invaders, desenvolvido com a biblioteca Pygame. Este projeto é baseado nos capítulos 12, 13 e 14 do livro "Python Crash Course" de Eric Matthes com minhas modificações.
+
+## Modificações do porjeto
+ - Maior quantidade e tipos de projéteis.
+ - Alternacia entre tela simples e Fullscreen.
+ - Botão de pause.
+ - Movimentação de nave do jogador para todas as direções.
+
 ## Pré-requisitos
 
 - Python 3.6 ou superior
@@ -31,19 +38,23 @@ Alien Invaders é um jogo inspirado no clássico Space Invaders, desenvolvido co
    pip install -r requirements.txt
 
 Se o arquivo requirements.txt não estiver presente, você pode instalar o Pygame diretamente:
-    ```bash
+    
     pip install pygame
 
 ## Como jogar
 Inicie o jogo:
 
-    python alien_invaders.py
+    python3 alien_invaders.py
 
 Controles do jogo:
 
 - Pressione **q** para fechar o jogo.
 - Pressione **f** para alternar entre tela cheia e modo janela.
 - Pressione **p** para iniciar ou pausar o jogo.
+- Pressione as teclas de direção para movimentar a nave.
+- Pressione **espaço** para disparar.
+- Alterne entre os projéteis utilizando **1**, **2**, **3** ou **4**
+
 ## Estrutura do projeto
 
     attack-invasion/
