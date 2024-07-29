@@ -2,7 +2,7 @@
 
 Alien Invaders é um jogo inspirado no clássico Space Invaders, desenvolvido com a biblioteca Pygame. Este projeto é baseado nos capítulos 12, 13 e 14 do livro "Python Crash Course" de Eric Matthes com minhas modificações.
 
-## Modificações do porjeto
+## Modificações do projeto
  - Maior quantidade e tipos de projéteis.
  - Alternacia entre tela simples e Fullscreen.
  - Botão de pause.
