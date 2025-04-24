@@ -1,6 +1,6 @@
 import pygame
 
-from bullet import Bullet
+from bullets.bullet import Bullet
 
 
 class Bullet_blue(Bullet):

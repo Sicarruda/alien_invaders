@@ -5,16 +5,16 @@ from time import sleep
 
 from settings import Settings
 from ship import Ship
-from bullet_black import Bullet_black
-from bullet_blue import Bullet_blue
-from bullet_green import Bullet_green
-from bullet_red import Bullet_red
+from bullets.bullet_black import Bullet_black
+from bullets.bullet_blue import Bullet_blue
+from bullets.bullet_green import Bullet_green
+from bullets.bullet_red import Bullet_red
 from alien import Alien
 from game_stats import Game_Stats
-from button import Button
-from pause_button import Pause_button
+from buttons.button import Button
+from buttons.pause_button import Pause_button
 from scoreboard import Scoreboard
-from menu import Menu
+from menus.initial_menu import Initial_menu
 
 
 # TODO refatorar o código para a exibição e criação dos projeteis
@@ -41,7 +41,7 @@ class AlienInvasion:
         self.background_image = self.settings.background_image
 
         # Menu bar
-        self.menu = Menu(self)
+        self.menu = Initial_menu(self)
 
         self.level_up = False
         self.reset_game = False

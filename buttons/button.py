@@ -4,7 +4,7 @@ import pygame.font
 class Button:
     # A class to build buttons for the game.
 
-    def __init__(self, ai_game, msg, ):
+    def __init__(self, ai_game, msg):
         # Initialize button attributes.
 
         self.screen = ai_game.screen

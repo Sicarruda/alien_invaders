@@ -1,6 +1,6 @@
 import pygame.font
 
-from button import Button
+from buttons.button import Button
 
 
 class Pause_button(Button):

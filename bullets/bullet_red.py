@@ -1,9 +1,9 @@
 import pygame
 
-from bullet import Bullet
+from bullets.bullet import Bullet
 
 
-class Bullet_green(Bullet):
+class Bullet_red(Bullet):
 
     def __init__(self, ai_game):
         # Create a bullet object at the ship's current position.
@@ -11,10 +11,10 @@ class Bullet_green(Bullet):
         super().__init__(ai_game)
         self.screen = ai_game.screen
         self.settings = ai_game.settings
-        self.color = (0,255,0)
-        self.bullet_speed = 2.0
+        self.color = (255,0,0)
+        self.bullet_speed = 5.0
         self.bullet_allowed = 10
-        self.bullet_dameged = 2
+        self.bullet_dameged = 1
         
         # Create a bullet rect at (0,0) and then set correct position.
         self.rect = pygame.Rect(
@@ -24,3 +24,4 @@ class Bullet_green(Bullet):
 
         # Store the bullet's position as a float.
         self.y = float(self.rect.y)
+
