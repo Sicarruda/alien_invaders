@@ -11,7 +11,7 @@ class Settings:
         self.screen_height = 0
         self.screen_width_standard = 1200
         self.screen_height_standard = 800
-        self.bg_color = (230, 230, 230)
+        self.bg_color = (255, 255, 255)
         self.fullscreen_mode = False
         self.background_image = pygame.image.load("images/nightskycolor.bmp")
 

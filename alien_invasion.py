@@ -14,6 +14,7 @@ from game_stats import Game_Stats
 from button import Button
 from pause_button import Pause_button
 from scoreboard import Scoreboard
+from menu import Menu
 
 
 # TODO refatorar o código para a exibição e criação dos projeteis
@@ -39,8 +40,8 @@ class AlienInvasion:
         )
         self.background_image = self.settings.background_image
 
-        # Make the Play button.
-        self.play_button = Button(self, "PLAY")
+        # Menu bar
+        self.menu = Menu(self)
 
         self.level_up = False
         self.reset_game = False
@@ -217,7 +218,7 @@ class AlienInvasion:
     def _check_play_button(self, mouse_pos):
         # Start a new game when the player clicks Play or press p.
 
-        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        button_clicked = self.menu.play_button.rect.collidepoint(mouse_pos)
 
         if button_clicked or self.restart_key:
             # Reset the game statistics.
@@ -402,7 +403,7 @@ class AlienInvasion:
         # Update images on the screen, and flip to the new screen.
 
         self.screen.fill(self.settings.bg_color)
-        # self.screen.blit(self.background_image,(0,0))
+        self.screen.blit(self.background_image,(0,0))
 
         if self.change_screen_mode:
             # Change screen mode to Fullscreen.
@@ -448,7 +449,7 @@ class AlienInvasion:
 
         # Draw the play button if the game is inactive.
         if not self.game_active:
-            self.play_button.draw_button()
+            self.menu.draw_menu()
 
         # Draw the pause button if the game is active.
         if self.game_active:

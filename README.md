@@ -44,7 +44,7 @@ Se o arquivo requirements.txt não estiver presente, você pode instalar o Pygam
 ## Como jogar
 Inicie o jogo:
 
-    python3 alien_invaders.py
+    python3 alien_invasion.py
 
 Controles do jogo:
 
