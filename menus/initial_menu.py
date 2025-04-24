@@ -1,21 +1,16 @@
 import pygame
 
 from menus.menu import Menu
-from settings import Settings
 from buttons.button import Button
+from buttons.settings_button import Settings_button
 
 class Initial_menu (Menu):
     def __init__(self, ai_game):
         super().__init__(ai_game)
 
-        self.settings = Settings()
-        self.width, self.height = 200, 800
-        self.screen = ai_game.screen
-        self.screen_rect = self.screen.get_rect()
-
         # Build the button's rect object.
         self.play_button = Button(self, "PLAY")
-        self.settings_button = Button(self, "SETTINGS")
+        self.settings_button = Settings_button(self, "SETTINGS")
         self.quit_button = Button(self, "QUIT")
 
         self.list_buttons = [self.play_button, self.settings_button, self.quit_button]

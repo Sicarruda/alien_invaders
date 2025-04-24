@@ -1,12 +1,17 @@
 import pygame
 
+from settings import Settings
+
 class Menu():
     def __init__(self, ai_game):
-        pass
+        self.settings = Settings()
+        self.width, self.height = 200, 800
+        self.screen = ai_game.screen
+        self.screen_rect = self.screen.get_rect()
 
     def _position_buttons(self, list_buttons):
         # Espaçamento entre os botões
-        spacing = 40
+        spacing = 15
         button_height = list_buttons[0].rect.height
         total_height = len(list_buttons) * button_height + (len(list_buttons) - 1) * spacing
         start_y = self.screen_rect.centery - total_height // 2
