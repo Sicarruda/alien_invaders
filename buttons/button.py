@@ -20,6 +20,7 @@ class Button:
         self.rect = pygame.Rect(0,0,self.width,self.height)
 
         # The button message needs to be prepped only once.
+        self.msg = msg
         self._prep_msg(msg)
 
     def _prep_msg(self, msg):
@@ -32,3 +33,12 @@ class Button:
         # Draw blank button and then draw message.
         self.screen.fill(self.button_color,self.rect)
         self.screen.blit(self.msg_image,self.msg_image_rect)
+
+    def check_button(self, mouse_pos, msg):
+        # Check if the button is clicked.
+        button_clicked = self.rect.collidepoint(mouse_pos)
+
+        if button_clicked and msg == self.msg:
+            return button_clicked
+        
+        return False

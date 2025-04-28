@@ -16,6 +16,11 @@ class Initial_menu (Menu):
         self.list_buttons = [self.play_button, self.settings_button, self.quit_button]
 
         # Position the buttons in the center of the screen
-        self._position_buttons(self.list_buttons)
+        self.position_buttons(self.list_buttons)
 
-   
+    # Check who is the button clicked and return the button clicked
+    def check_buttons_click(self, mouse_pos):
+        button_clicked = self.rect.collidepoint(mouse_pos)
+        for button in self.list_buttons:
+            if button.rect.collidepoint(mouse_pos):
+               return button.check_button(button_clicked, msg=button.msg)

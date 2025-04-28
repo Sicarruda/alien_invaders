@@ -9,7 +9,7 @@ class Menu():
         self.screen = ai_game.screen
         self.screen_rect = self.screen.get_rect()
 
-    def _position_buttons(self, list_buttons):
+    def position_buttons(self, list_buttons):
         # Espaçamento entre os botões
         spacing = 15
         button_height = list_buttons[0].rect.height

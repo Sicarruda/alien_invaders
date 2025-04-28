@@ -11,10 +11,10 @@ from bullets.bullet_green import Bullet_green
 from bullets.bullet_red import Bullet_red
 from alien import Alien
 from game_stats import Game_Stats
-from buttons.button import Button
 from buttons.pause_button import Pause_button
 from scoreboard import Scoreboard
 from menus.initial_menu import Initial_menu
+
 
 
 # TODO refatorar o código para a exibição e criação dos projeteis
@@ -41,14 +41,14 @@ class AlienInvasion:
         self.background_image = self.settings.background_image
 
         # Menu bar
-        self.menu = Initial_menu(self)
+        self.initial_menu = Initial_menu(self)
 
         self.level_up = False
         self.reset_game = False
 
         # Pause the game
-        self.pause = False
         self.pause_button = Pause_button(self, "PAUSE")
+        self.pause = False
         self.restart_key = False
 
         # Create an instance to store game statistics
@@ -205,20 +205,10 @@ class AlienInvasion:
             # Move the ship to the botton.
             self.ship.moving_bottom = False
 
-    def _check_pause_button(self, mouse_pos):
-        # Pouse the game when the player clicks "||"
-
-        button_clicked = self.pause_button.rect.collidepoint(mouse_pos)
-
-        if button_clicked or self.restart_key:
-
-            self.pause = not self.pause
-            self.restart_key = False
-
     def _check_play_button(self, mouse_pos):
         # Start a new game when the player clicks Play or press p.
 
-        button_clicked = self.menu.play_button.rect.collidepoint(mouse_pos)
+        button_clicked = self.initial_menu.play_button.rect.collidepoint(mouse_pos)
 
         if button_clicked or self.restart_key:
             # Reset the game statistics.
@@ -238,13 +228,14 @@ class AlienInvasion:
             self._restart_fleet()
             self.ship.restart()
 
-            # Hide the mouse cursor.
-            pygame.mouse.set_visible(False)
+            # Show the mouse cursor.
+            pygame.mouse.set_visible(True)
 
     def _check_events(self):
         # Respond to keypresses and mouse events.
 
         for event in pygame.event.get():
+            mouse_pos = pygame.mouse.get_pos()
 
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -256,9 +247,14 @@ class AlienInvasion:
                 self._check_keyup_events(event)
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
                 self._check_play_button(mouse_pos)
-                self._check_pause_button(mouse_pos)
+                
+                if self.initial_menu.quit_button.check_button(mouse_pos, self.initial_menu.quit_button.msg):
+                    sys.exit()
+
+                checked_pause = self.pause_button.check_button(mouse_pos, self.pause, self.restart_key, msg=self.pause_button.msg)
+                self.pause = checked_pause[0]
+                self.restart_key = checked_pause[1] 
 
     def _fire_bullet(self):
         # Create a new bullet and add it to the bullets group.
@@ -449,7 +445,7 @@ class AlienInvasion:
 
         # Draw the play button if the game is inactive.
         if not self.game_active:
-            self.menu.draw_menu()
+            self.initial_menu.draw_menu()
 
         # Draw the pause button if the game is active.
         if self.game_active:
