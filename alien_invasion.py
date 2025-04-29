@@ -15,8 +15,6 @@ from buttons.pause_button import Pause_button
 from scoreboard import Scoreboard
 from menus.initial_menu import Initial_menu
 
-
-
 # TODO refatorar o código para a exibição e criação dos projeteis
 
 
@@ -136,7 +134,7 @@ class AlienInvasion:
         if event.key == pygame.K_f:
             # Change the variables to change the screen mode.
             self.change_screen_mode = True
-            self.ship_restart = True
+            # self.ship_restart = True
 
             self.settings.fullscreen_mode = not self.settings.fullscreen_mode
 
@@ -144,11 +142,32 @@ class AlienInvasion:
             # key to start and pause the game
             if self.game_active:
                 self.restart_key = True
-                self._check_pause_button((0, 0))
+                checked_pause = self.pause_button.check_button(
+                    (0,0), self.pause, self.restart_key, self.pause_button.msg
+                )
+                self.pause = checked_pause[0]
+                self.restart_key = checked_pause[1]
 
             else:
                 self.restart_key = True
-                self._check_play_button((0, 0))
+                self.stats.reset_stats()
+                self.ship.reset_update()
+                self.score.prep_score()
+                self.score.prep_level()
+                self.settings.alien_points = 1
+
+                self.reset_game = True
+                self.game_active = True
+                self.restart_key = False
+                self.alien_speed = 1
+
+                # Get rid of any remaining bullets and aliens and restart de game.
+                self.aliens.empty()
+                self._restart_fleet()
+                self.ship.restart()
+
+                # Show the mouse cursor.
+                pygame.mouse.set_visible(True)
 
         if event.key == pygame.K_RIGHT:
             # Move the ship to the right
@@ -205,32 +224,6 @@ class AlienInvasion:
             # Move the ship to the botton.
             self.ship.moving_bottom = False
 
-    def _check_play_button(self, mouse_pos):
-        # Start a new game when the player clicks Play or press p.
-
-        button_clicked = self.initial_menu.play_button.rect.collidepoint(mouse_pos)
-
-        if button_clicked or self.restart_key:
-            # Reset the game statistics.
-            self.stats.reset_stats()
-            self.ship.reset_update()
-            self.score.prep_score()
-            self.score.prep_level()
-            self.settings.alien_points = 1
-
-            self.reset_game = True
-            self.game_active = True
-            self.restart_key = False
-            self.alien_speed = 1
-            
-            # Get rid of any remaining bullets and aliens and restart de game.
-            self.aliens.empty()
-            self._restart_fleet()
-            self.ship.restart()
-
-            # Show the mouse cursor.
-            pygame.mouse.set_visible(True)
-
     def _check_events(self):
         # Respond to keypresses and mouse events.
 
@@ -247,14 +240,38 @@ class AlienInvasion:
                 self._check_keyup_events(event)
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self._check_play_button(mouse_pos)
-                
-                if self.initial_menu.quit_button.check_button(mouse_pos, self.initial_menu.quit_button.msg):
+                if self.initial_menu.play_button.check_button(
+                    mouse_pos, self.initial_menu.play_button.msg
+                ):
+                    self.stats.reset_stats()
+                    self.ship.reset_update()
+                    self.score.prep_score()
+                    self.score.prep_level()
+                    self.settings.alien_points = 1
+
+                    self.reset_game = True
+                    self.game_active = True
+                    self.restart_key = False
+                    self.alien_speed = 1
+
+                    # Get rid of any remaining bullets and aliens and restart de game.
+                    self.aliens.empty()
+                    self._restart_fleet()
+                    self.ship.restart()
+
+                    # Show the mouse cursor.
+                    pygame.mouse.set_visible(True)
+
+                if self.initial_menu.quit_button.check_button(
+                    mouse_pos, self.initial_menu.quit_button.msg
+                ):
                     sys.exit()
 
-                checked_pause = self.pause_button.check_button(mouse_pos, self.pause, self.restart_key, msg=self.pause_button.msg)
+                checked_pause = self.pause_button.check_button(
+                    mouse_pos, self.pause, self.restart_key, self.pause_button.msg
+                )
                 self.pause = checked_pause[0]
-                self.restart_key = checked_pause[1] 
+                self.restart_key = checked_pause[1]
 
     def _fire_bullet(self):
         # Create a new bullet and add it to the bullets group.
@@ -399,7 +416,7 @@ class AlienInvasion:
         # Update images on the screen, and flip to the new screen.
 
         self.screen.fill(self.settings.bg_color)
-        self.screen.blit(self.background_image,(0,0))
+        self.screen.blit(self.background_image, (0, 0))
 
         if self.change_screen_mode:
             # Change screen mode to Fullscreen.
