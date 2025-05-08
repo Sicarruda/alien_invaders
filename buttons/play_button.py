@@ -4,7 +4,6 @@ import pygame
 from buttons.button import Button
 
 
-
 class Play_button(Button):
     def __init__(self, ai_game, msg):
         super().__init__(ai_game, msg)

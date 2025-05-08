@@ -4,7 +4,8 @@ from menus.menu import Menu
 from buttons.button import Button
 from buttons.settings_button import Settings_button
 
-class Initial_menu (Menu):
+
+class Initial_menu(Menu):
     def __init__(self, ai_game):
         super().__init__(ai_game)
 
@@ -23,4 +24,4 @@ class Initial_menu (Menu):
         button_clicked = self.rect.collidepoint(mouse_pos)
         for button in self.list_buttons:
             if button.rect.collidepoint(mouse_pos):
-               return button.check_button(button_clicked, msg=button.msg)
+                return button.check_button(button_clicked, msg=button.msg)

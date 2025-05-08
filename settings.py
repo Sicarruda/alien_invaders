@@ -1,5 +1,6 @@
 import pygame
 
+
 class Settings:
     # A class to store all settings for Alien Invasion.
 
@@ -21,20 +22,30 @@ class Settings:
         # Aliens settings:
         self.fleet_drop_speed = 10
         self.alien_speed = 1.0
-        
+
         # fleet_diretction of 1 = right; -1 = left.
         self.fleet_direction = 1
 
         # How quickly the game speeds up
         self.speedup_scale = 1.1
-        
+
         # How quickly the alien point values increase
         self.score_scale = 1.1
 
         # Scoring settings
         self.alien_points = 10
 
+        # Difficulty settings
+        self.difficulty = "easy"
+
     def level_up(self, object_update):
-       object_update *= self.speedup_scale
-       return object_update
-    
+        object_update *= self.speedup_scale
+        return object_update
+
+    def game_difficulty(self):
+        if self.difficulty == "easy":
+            self.speedup_scale = 1.1
+        if self.difficulty == "medium":
+            self.speedup_scale = 1.3
+        if self.difficulty == "hard":
+            self.speedup_scale = 1.5
