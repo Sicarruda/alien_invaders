@@ -1,4 +1,3 @@
-import pygame.font
 
 from buttons.button import Button
 
