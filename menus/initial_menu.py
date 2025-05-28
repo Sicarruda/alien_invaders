@@ -2,21 +2,21 @@ import pygame
 
 from menus.menu import Menu
 from buttons.button import Button
-from buttons.save_button import Save_button
-from buttons.play_button import Play_button
-from buttons.quit_button import Quit_button
-from buttons.settings_button import Settings_button
+from buttons.save_button import Save_Button
+from buttons.play_button import Play_Button
+from buttons.quit_button import Quit_Button
+from buttons.settings_button import Settings_Button
 
 
-class Initial_menu(Menu):
+class InitialMenu(Menu):
     def __init__(self, ai_game):
         super().__init__(ai_game)
 
         # Build the button's rect object.
         self.play_button = Button(self, "PLAY")
-        self.save_button = Play_button(self, "SAVE")
-        self.settings_button = Settings_button(self, "SETTINGS")
-        self.quit_button = Quit_button(self, "QUIT")
+        self.save_button = Play_Button(self, "SAVE")
+        self.settings_button = Settings_Button(self, "SETTINGS")
+        self.quit_button = Quit_Button(self, "QUIT")
 
         self.list_buttons = [self.play_button, self.save_button, self.settings_button, self.quit_button]
 

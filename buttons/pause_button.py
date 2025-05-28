@@ -3,7 +3,7 @@ import pygame.font
 from buttons.button import Button
 
 
-class Pause_button(Button):
+class PauseButton(Button):
 
     def __init__(self, ai_game, msg):
         super().__init__(

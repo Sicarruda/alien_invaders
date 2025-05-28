@@ -2,7 +2,7 @@
 from buttons.button import Button
 
 
-class Settings_button(Button):
+class Settings_Button(Button):
 
     def __init__(self, ai_game, msg):
         super().__init__(

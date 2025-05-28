@@ -5,17 +5,16 @@ from time import sleep
 
 from settings import Settings
 from ship import Ship
-from bullets.bullet_black import Bullet_black
-from bullets.bullet_blue import Bullet_blue
-from bullets.bullet_green import Bullet_green
-from bullets.bullet_red import Bullet_red
+from bullets.bullet_black import BulletBlack
+from bullets.bullet_blue import BulletBlue
+from bullets.bullet_green import BulletGreen
+from bullets.bullet_red import BulletRed
 from alien import Alien
-from game_stats import Game_Stats
-from buttons.pause_button import Pause_button
+from game_stats import GameStats
+from buttons.pause_button import PauseButton
 from scoreboard import Scoreboard
-from menus.initial_menu import Initial_menu
-
-# TODO refatorar o código para a exibição e criação dos projeteis
+from menus.initial_menu import InitialMenu
+from game_state_saver import GameStateSaver
 
 
 class AlienInvasion:
@@ -39,35 +38,39 @@ class AlienInvasion:
         self.background_image = self.settings.background_image
 
         # Menu bar
-        self.initial_menu = Initial_menu(self)
-
-        self.level_up = False
-        self.reset_game = False
+        self.initial_menu = InitialMenu(self)
 
         # Pause the game
-        self.pause_button = Pause_button(self, "PAUSE")
+        self.pause_button = PauseButton(self, "PAUSE")
         self.pause = False
         self.restart_key = False
 
         # Create an instance to store game statistics
-        self.stats = Game_Stats(self)
+        self.stats = GameStats(self)
         self.score = Scoreboard(self)
+        self.level_up = False
+        self.reset_game = False
 
+        # Create the ship
         self.ship = Ship(self)
         self.ship_restart = False
 
+        # Create the bullets
         self.bullet_tipe = 1  # 1 = black; 2 = red; 3 = green; 4 = blue
         self.bullets_black_group = pygame.sprite.Group()
         self.bullets_red_group = pygame.sprite.Group()
         self.bullets_green_group = pygame.sprite.Group()
         self.bullets_blue_group = pygame.sprite.Group()
-        self.bullet_black = Bullet_black(self)
-        self.bullet_red = Bullet_red(self)
-        self.bullet_blue = Bullet_blue(self)
-        self.bullet_green = Bullet_green(self)
+        self.bullet_black = BulletBlack(self)
+        self.bullet_red = BulletRed(self)
+        self.bullet_blue = BulletBlue(self)
+        self.bullet_green = BulletGreen(self)
 
         self.aliens = pygame.sprite.Group()
         self.alien_speed = 1
+
+        # Save the game state
+        self.save_game_state = GameStateSaver(self)
 
         pygame.display.set_caption("Attack Invasion")
 
@@ -129,6 +132,7 @@ class AlienInvasion:
 
         if event.key == pygame.K_q:
             # Exit to the game when press q.
+            self.save_game_state.save_to_json()
             sys.exit()
 
         if event.key == pygame.K_f:
@@ -143,7 +147,7 @@ class AlienInvasion:
             if self.game_active:
                 self.restart_key = True
                 checked_pause = self.pause_button.check_button(
-                    (0,0), self.pause, self.restart_key, self.pause_button.msg
+                    (0, 0), self.pause, self.restart_key, self.pause_button.msg
                 )
                 self.pause = checked_pause[0]
                 self.restart_key = checked_pause[1]
@@ -231,6 +235,7 @@ class AlienInvasion:
             mouse_pos = pygame.mouse.get_pos()
 
             if event.type == pygame.QUIT:
+                self.save_game_state.save_to_json()
                 sys.exit()
 
             elif event.type == pygame.KEYDOWN:
@@ -279,28 +284,28 @@ class AlienInvasion:
             self.bullet_tipe == 1
             and len(self.bullets_black_group) < self.bullet_black.bullet_allowed
         ):
-            new_bullet = Bullet_black(self)
+            new_bullet = BulletBlack(self)
             self.bullets_black_group.add(new_bullet)
 
         if (
             self.bullet_tipe == 2
             and len(self.bullets_red_group) < self.bullet_red.bullet_allowed
         ):
-            new_bullet = Bullet_red(self)
+            new_bullet = BulletRed(self)
             self.bullets_red_group.add(new_bullet)
 
         if (
             self.bullet_tipe == 3
             and len(self.bullets_green_group) < self.bullet_green.bullet_allowed
         ):
-            new_bullet = Bullet_green(self)
+            new_bullet = BulletGreen(self)
             self.bullets_green_group.add(new_bullet)
 
         if (
             self.bullet_tipe == 4
             and len(self.bullets_blue_group) < self.bullet_blue.bullet_allowed
         ):
-            new_bullet = Bullet_blue(self)
+            new_bullet = BulletBlue(self)
             self.bullets_blue_group.add(new_bullet)
 
     def _update_bullets(self):

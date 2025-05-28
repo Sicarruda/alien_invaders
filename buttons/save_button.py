@@ -3,7 +3,7 @@ import pygame
 from buttons.button import Button
 
 
-class Save_button(Button):
+class Save_Button(Button):
 
     def __init__(self, ai_game, msg):
         super().__init__(

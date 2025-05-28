@@ -3,7 +3,7 @@ import pygame
 from buttons.button import Button
 
 
-class Play_button(Button):
+class Play_Button(Button):
     def __init__(self, ai_game, msg):
         super().__init__(ai_game, msg)
 

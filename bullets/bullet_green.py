@@ -3,7 +3,7 @@ import pygame
 from bullets.bullet import Bullet
 
 
-class Bullet_green(Bullet):
+class BulletGreen(Bullet):
 
     def __init__(self, ai_game):
         # Create a bullet object at the ship's current position.
