@@ -19,12 +19,9 @@ class GameStateSaver:
             "ships_left": self.stats.ships_left,
             "high_score": self.stats.high_score,
             "settings": {
-                "screen_width": self.settings.screen_width,
-                "screen_height": self.settings.screen_height,
                 "screen_width_standard": self.settings.screen_width_standard,
                 "screen_height_standard": self.settings.screen_height_standard,
                 "fullscreen_mode": self.settings.fullscreen_mode,
-                "bg_color": self.settings.bg_color,
                 "ship_limit": self.settings.ship_limit,
                 "alien_speed": self.settings.alien_speed,
                 "fleet_drop_speed": self.settings.fleet_drop_speed,
@@ -38,5 +35,28 @@ class GameStateSaver:
         self.create_state()
 
         with open(filename, "w") as f:
-            print(self.state, "saving to file")
+            print("saving to file")
             json.dump(self.state, f)
+
+    def load_from_json(self, filename="game_state.json"):
+        try:
+            with open(filename, "r") as f:
+                self.state = json.load(f)
+                print("loading from file")
+                
+                # Update the game stats and settings with the loaded state.
+                self.stats.score = self.state["score"]
+                self.stats.level = self.state["level"]
+                self.stats.ships_left = self.state["ships_left"]
+                self.stats.high_score = self.state["high_score"]
+                self.settings.screen_width_standard = self.state["settings"]["screen_width_standard"]
+                self.settings.screen_height_standard = self.state["settings"]["screen_height_standard"]
+                self.settings.fullscreen_mode = self.state["settings"]["fullscreen_mode"]
+                self.settings.ship_limit = self.state["settings"]["ship_limit"]
+                self.settings.alien_speed = self.state["settings"]["alien_speed"]
+                self.settings.fleet_drop_speed = self.state["settings"]["fleet_drop_speed"]
+                self.settings.fleet_direction = self.state["settings"]["fleet_direction"]
+                self.settings.difficulty = self.state["settings"]["difficulty"]
+
+        except FileNotFoundError:
+            print("No saved game state found.")

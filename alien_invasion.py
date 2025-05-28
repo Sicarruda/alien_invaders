@@ -153,8 +153,12 @@ class AlienInvasion:
                 self.restart_key = checked_pause[1]
 
             else:
+                if self.stats.ships_left == 0:
+                    self.stats.reset_stats()
+                else:
+                    self.save_game_state.load_from_json()
+
                 self.restart_key = True
-                self.stats.reset_stats()
                 self.ship.reset_update()
                 self.score.prep_score()
                 self.score.prep_level()
@@ -165,12 +169,12 @@ class AlienInvasion:
                 self.restart_key = False
                 self.alien_speed = 1
 
-                # Get rid of any remaining bullets and aliens and restart de game.
+                # # Get rid of any remaining bullets and aliens and restart de game.
                 self.aliens.empty()
                 self._restart_fleet()
                 self.ship.restart()
 
-                # Show the mouse cursor.
+                # # Show the mouse cursor.
                 pygame.mouse.set_visible(True)
 
         if event.key == pygame.K_RIGHT:
@@ -248,7 +252,10 @@ class AlienInvasion:
                 if self.initial_menu.play_button.check_button(
                     mouse_pos, self.initial_menu.play_button.msg
                 ):
-                    self.stats.reset_stats()
+                    if self.stats.ships_left == 0:
+                        self.stats.reset_stats()
+                    else:
+                        self.save_game_state.load_from_json()
                     self.ship.reset_update()
                     self.score.prep_score()
                     self.score.prep_level()
@@ -270,6 +277,7 @@ class AlienInvasion:
                 if self.initial_menu.quit_button.check_button(
                     mouse_pos, self.initial_menu.quit_button.msg
                 ):
+                    self.save_game_state.save_to_json()
                     sys.exit()
 
                 checked_pause = self.pause_button.check_button(
@@ -358,7 +366,7 @@ class AlienInvasion:
             or collision_green_bullet
             or collision_blue_bullet
         ):
-            self.stats.score += self.settings.alien_points
+            self.stats.score = round(self.stats.score + (self.settings.alien_points),2)
             self.score.prep_score()
             self.score.check_high_score()
 
