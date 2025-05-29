@@ -14,7 +14,7 @@ class Alien(Sprite):
         self.speed = 1.0
 
         # Load the alien image and set its react.
-        self.image = pygame.image.load("images/alien.bmp")
+        self.image = pygame.image.load("images\PNG\playerShip1_blue.png")
         self.rect = self.image.get_rect()
 
         # Start each new alien near the top left of the screen.
@@ -49,7 +49,6 @@ class Alien(Sprite):
 
     def blitme(self):
         # Draw the ship at its current location.
-
         self.screen.blit(self.image, self.rect)
 
     def level_updade(self):

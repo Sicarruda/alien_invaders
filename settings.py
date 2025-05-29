@@ -1,5 +1,6 @@
 import pygame
 
+
 class Settings:
     # A class to store all settings for Alien Invasion.
 
@@ -11,7 +12,7 @@ class Settings:
         self.screen_height = 0
         self.screen_width_standard = 1200
         self.screen_height_standard = 800
-        self.bg_color = (230, 230, 230)
+        self.bg_color = (255, 255, 255)
         self.fullscreen_mode = False
         self.background_image = pygame.image.load("images/nightskycolor.bmp")
 
@@ -21,20 +22,30 @@ class Settings:
         # Aliens settings:
         self.fleet_drop_speed = 10
         self.alien_speed = 1.0
-        
+
         # fleet_diretction of 1 = right; -1 = left.
         self.fleet_direction = 1
 
         # How quickly the game speeds up
         self.speedup_scale = 1.1
-        
+
         # How quickly the alien point values increase
         self.score_scale = 1.1
 
         # Scoring settings
         self.alien_points = 10
 
+        # Difficulty settings
+        self.difficulty = "easy"
+
     def level_up(self, object_update):
-       object_update *= self.speedup_scale
-       return object_update
-    
+        object_update *= self.speedup_scale
+        return object_update
+
+    def game_difficulty(self):
+        if self.difficulty == "easy":
+            self.speedup_scale = 1.1
+        if self.difficulty == "medium":
+            self.speedup_scale = 1.3
+        if self.difficulty == "hard":
+            self.speedup_scale = 1.5
