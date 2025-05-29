@@ -132,7 +132,6 @@ class AlienInvasion:
 
         if event.key == pygame.K_q:
             # Exit to the game when press q.
-            self.save_game_state.save_to_json()
             sys.exit()
 
         if event.key == pygame.K_f:
@@ -155,6 +154,8 @@ class AlienInvasion:
             else:
                 if self.stats.ships_left == 0:
                     self.stats.reset_stats()
+                    self.alien_speed = 1  
+                    self.save_game_state.save_to_json()
                 else:
                     self.save_game_state.load_from_json()
 
@@ -167,7 +168,7 @@ class AlienInvasion:
                 self.reset_game = True
                 self.game_active = True
                 self.restart_key = False
-                self.alien_speed = 1
+                
 
                 # # Get rid of any remaining bullets and aliens and restart de game.
                 self.aliens.empty()
@@ -239,7 +240,6 @@ class AlienInvasion:
             mouse_pos = pygame.mouse.get_pos()
 
             if event.type == pygame.QUIT:
-                self.save_game_state.save_to_json()
                 sys.exit()
 
             elif event.type == pygame.KEYDOWN:
@@ -254,6 +254,8 @@ class AlienInvasion:
                 ):
                     if self.stats.ships_left == 0:
                         self.stats.reset_stats()
+                        self.alien_speed = 1
+                        self.save_game_state.save_to_json()
                     else:
                         self.save_game_state.load_from_json()
                     self.ship.reset_update()
@@ -264,7 +266,6 @@ class AlienInvasion:
                     self.reset_game = True
                     self.game_active = True
                     self.restart_key = False
-                    self.alien_speed = 1
 
                     # Get rid of any remaining bullets and aliens and restart de game.
                     self.aliens.empty()
@@ -277,7 +278,6 @@ class AlienInvasion:
                 if self.initial_menu.quit_button.check_button(
                     mouse_pos, self.initial_menu.quit_button.msg
                 ):
-                    self.save_game_state.save_to_json()
                     sys.exit()
 
                 checked_pause = self.pause_button.check_button(
@@ -378,6 +378,7 @@ class AlienInvasion:
             # Increase level.
             self.stats.level += 1
             self.score.prep_level()
+            self.save_game_state.save_to_json()
 
     def _restart_fleet(self):
         # Destroy existing bullets and create new fleet.
