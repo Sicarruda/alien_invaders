@@ -14,6 +14,7 @@ from game_stats import GameStats
 from buttons.pause_button import PauseButton
 from scoreboard import Scoreboard
 from menus.initial_menu import InitialMenu
+from menus.settings_menu import SettingsMenu
 from game_state_saver import GameStateSaver
 
 
@@ -39,6 +40,7 @@ class AlienInvasion:
 
         # Menu bar
         self.initial_menu = InitialMenu(self)
+        self.settings_menu = SettingsMenu(self)
 
         # Pause the game
         self.pause_button = PauseButton(self, "PAUSE")
@@ -154,7 +156,7 @@ class AlienInvasion:
             else:
                 if self.stats.ships_left == 0:
                     self.stats.reset_stats()
-                    self.alien_speed = 1  
+                    self.alien_speed = 1
                     self.save_game_state.save_to_json()
                 else:
                     self.save_game_state.load_from_json()
@@ -168,7 +170,6 @@ class AlienInvasion:
                 self.reset_game = True
                 self.game_active = True
                 self.restart_key = False
-                
 
                 # # Get rid of any remaining bullets and aliens and restart de game.
                 self.aliens.empty()
@@ -249,36 +250,65 @@ class AlienInvasion:
                 self._check_keyup_events(event)
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if self.initial_menu.play_button.check_button(
-                    mouse_pos, self.initial_menu.play_button.msg
-                ):
-                    if self.stats.ships_left == 0:
-                        self.stats.reset_stats()
-                        self.alien_speed = 1
-                        self.save_game_state.save_to_json()
-                    else:
-                        self.save_game_state.load_from_json()
-                    self.ship.reset_update()
-                    self.score.prep_score()
-                    self.score.prep_level()
-                    self.settings.alien_points = 1
+                if self.initial_menu.active:
+                    if self.initial_menu.new_game_button.check_button(
+                        mouse_pos, self.initial_menu.new_game_button.msg
+                    ):
+                        if self.stats.ships_left == 0:
+                            self.stats.reset_stats()
+                            self.alien_speed = 1
+                            self.save_game_state.save_to_json()
+                        else:
+                            self.save_game_state.load_from_json()
+                        self.ship.reset_update()
+                        self.score.prep_score()
+                        self.score.prep_level()
+                        self.settings.alien_points = 1
 
-                    self.reset_game = True
-                    self.game_active = True
-                    self.restart_key = False
+                        self.reset_game = True
+                        self.game_active = True
+                        self.restart_key = False
 
-                    # Get rid of any remaining bullets and aliens and restart de game.
-                    self.aliens.empty()
-                    self._restart_fleet()
-                    self.ship.restart()
+                        # Get rid of any remaining bullets and aliens and restart de game.
+                        self.aliens.empty()
+                        self._restart_fleet()
+                        self.ship.restart()
 
-                    # Show the mouse cursor.
-                    pygame.mouse.set_visible(True)
+                        # Show the mouse cursor.
+                        pygame.mouse.set_visible(True)
 
-                if self.initial_menu.quit_button.check_button(
-                    mouse_pos, self.initial_menu.quit_button.msg
-                ):
-                    sys.exit()
+                    if self.initial_menu.quit_button.check_button(
+                        mouse_pos, self.initial_menu.quit_button.msg
+                    ):
+                        sys.exit()
+
+                    if self.initial_menu.settings_button.check_button(
+                        mouse_pos, self.initial_menu.settings_button.msg
+                    ):
+                        self.settings_menu.active = True
+                        self.initial_menu.active = False
+
+                if self.settings_menu.active:
+                    if self.settings_menu.back_button.check_button(
+                        mouse_pos, self.settings_menu.back_button.msg
+                    ):
+                        self.settings_menu.active = False
+                        self.initial_menu.active = True
+
+                    if self.settings_menu.fullscreen_button.check_button(
+                        mouse_pos, self.settings_menu.fullscreen_button.msg
+                    ):
+                        # Change the variables to change the screen mode.
+                        self.settings.fullscreen_mode = not self.settings.fullscreen_mode
+                        self.settings_menu.fullscreen_button._prep_msg(
+                            "FULLSCREEN ON" if not self.settings.fullscreen_mode else "FULLSCREEN OFF"
+                        )
+
+                    if self.settings_menu.difficulty_button.check_button(
+                        mouse_pos, self.settings_menu.difficulty_button.msg
+                    ):
+                        # Change the difficulty of the game.
+                        self.settings_menu.difficulty_button.toggle_difficulty()
 
                 checked_pause = self.pause_button.check_button(
                     mouse_pos, self.pause, self.restart_key, self.pause_button.msg
@@ -366,7 +396,7 @@ class AlienInvasion:
             or collision_green_bullet
             or collision_blue_bullet
         ):
-            self.stats.score = round(self.stats.score + (self.settings.alien_points),2)
+            self.stats.score = round(self.stats.score + (self.settings.alien_points), 2)
             self.score.prep_score()
             self.score.check_high_score()
 
@@ -474,9 +504,11 @@ class AlienInvasion:
         # Draw the score information
         self.score.show_score()
 
-        # Draw the play button if the game is inactive.
-        if not self.game_active:
+        # Draw the menus if the game is inactive.
+        if not self.game_active and self.initial_menu.active:
             self.initial_menu.draw_menu()
+        if not self.game_active and self.settings_menu.active:
+            self.settings_menu.draw_menu()
 
         # Draw the pause button if the game is active.
         if self.game_active:

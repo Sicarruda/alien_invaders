@@ -3,13 +3,9 @@ import pygame
 from buttons.button import Button
 
 
-class Save_Button(Button):
-
+class BackButton(Button):
     def __init__(self, ai_game, msg):
-        super().__init__(
-            ai_game,
-            msg,
-        )
+        super().__init__(ai_game, msg)
 
         self.screen = ai_game.screen
         self.screen_rect = self.screen.get_rect()
