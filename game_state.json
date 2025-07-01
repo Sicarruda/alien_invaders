@@ -1,0 +1,16 @@
+{
+  "score": 41.0,
+  "level": 3,
+  "ships_left": 2,
+  "high_score": 175.3,
+  "alien_speed": 3.2,
+  "settings": {
+    "screen_width_standard": 1200,
+    "screen_height_standard": 800,
+    "fullscreen_mode": false,
+    "fleet_drop_speed": 10,
+    "fleet_direction": -1,
+    "ship_limit": 2,
+    "difficulty": "easy"
+  }
+}

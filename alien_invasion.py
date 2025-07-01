@@ -456,6 +456,14 @@ class AlienInvasion:
                 self._ship_hit()
                 break
 
+    def _live_draw(self):
+        # Draw the number of ships left.
+        for ship_number in range(self.stats.ships_left):
+            ship_rect = self.ship.life_image.get_rect()
+            ship_rect.x = 10 + ship_number * ship_rect.width
+            ship_rect.y = 10
+            self.screen.blit(self.ship.life_image, ship_rect)
+
     def _update_screen(self):
         # Update images on the screen, and flip to the new screen.
 
@@ -503,6 +511,8 @@ class AlienInvasion:
 
         # Draw the score information
         self.score.show_score()
+
+        self._live_draw()
 
         # Draw the menus if the game is inactive.
         if not self.game_active and self.initial_menu.active:

@@ -13,3 +13,4 @@ class ContinueButton(Button):
         self.rect = pygame.Rect(0, 0, self.width, self.height)
 
         self._prep_msg(msg)
+  

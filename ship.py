@@ -11,7 +11,8 @@ class Ship:
         self.settings = ai_game.settings
 
         # Load the shep image and get its react.
-        self.image = pygame.image.load("images/ship.bmp")
+        self.image = pygame.image.load("images/PNG/playerShip1_blue.png")
+        self.life_image = pygame.image.load("images/PNG/UI/playerLife1_blue.png")
         self.rect = self.image.get_rect()
 
         # Start each new ship at the bottom center of the screen.
