@@ -38,10 +38,6 @@ class AlienInvasion:
         )
         self.background_image = self.settings.background_image
 
-        # Menu bar
-        self.initial_menu = InitialMenu(self)
-        self.settings_menu = SettingsMenu(self)
-
         # Pause the game
         self.pause_button = PauseButton(self, "PAUSE")
         self.pause = False
@@ -56,6 +52,10 @@ class AlienInvasion:
         # Create the ship
         self.ship = Ship(self)
         self.ship_restart = False
+
+        # Menu bar
+        self.initial_menu = InitialMenu(self)
+        self.settings_menu = SettingsMenu(self)
 
         # Create the bullets
         self.bullet_tipe = 1  # 1 = black; 2 = red; 3 = green; 4 = blue
@@ -155,6 +155,7 @@ class AlienInvasion:
 
             else:
                 if self.stats.ships_left == 0:
+                    self.stats.game_over = True
                     self.stats.reset_stats()
                     self.alien_speed = 1
                     self.save_game_state.save_to_json()
@@ -256,6 +257,7 @@ class AlienInvasion:
                     ):
                         if self.stats.ships_left == 0:
                             self.stats.reset_stats()
+                            self.stats.game_over = False
                             self.alien_speed = 1
                             self.save_game_state.save_to_json()
                         else:
@@ -447,6 +449,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.game_active = False
+            self.stats.game_over = True  # Set game over state
             pygame.mouse.set_visible(True)
 
     def _check_aliens_bottom(self):
@@ -456,7 +459,7 @@ class AlienInvasion:
                 self._ship_hit()
                 break
 
-    def _live_draw(self):
+    def _life_draw(self):
         # Draw the number of ships left.
         for ship_number in range(self.stats.ships_left):
             ship_rect = self.ship.life_image.get_rect()
@@ -512,11 +515,15 @@ class AlienInvasion:
         # Draw the score information
         self.score.show_score()
 
-        self._live_draw()
+        # Draw the life of the ship.
+        self._life_draw()
 
         # Draw the menus if the game is inactive.
         if not self.game_active and self.initial_menu.active:
-            self.initial_menu.draw_menu()
+            if self.stats.game_over:
+                self.initial_menu.draw_game_over()
+            else:
+                self.initial_menu.draw_menu()
         if not self.game_active and self.settings_menu.active:
             self.settings_menu.draw_menu()
 

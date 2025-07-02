@@ -13,6 +13,7 @@ class GameStats:
         self.score = 0
 
         self.lives = ai_game.settings.ship_limit
+        self.game_over = False
 
     def reset_stats(self):
         # Initialize statistics that can change during the game.
